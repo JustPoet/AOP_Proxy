@@ -1,0 +1,28 @@
+{
+  "name": "zean/proxy",
+  "description": "use this library can complete aop",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "zhengzean",
+      "email": "andyzheng1024@gmail.com"
+    }
+  ],
+  "require": {
+    "php":">=5.5"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "~4.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Zean\\Proxy\\": "src/Proxy/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Zean\\Proxy\\Tests\\": "tests/"
+    }
+  }
+}
