@@ -1,7 +1,7 @@
 {
   "name": "zean/proxy",
   "description": "use this library can complete aop",
-  "minimum-stability": "stable",
+  "minimum-stability": "dev",
   "license": "MIT",
   "authors": [
     {
