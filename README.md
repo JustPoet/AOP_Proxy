@@ -66,7 +66,7 @@ class LogAdvice implements AroundAdvice
     }
 }
 
-$logProxy = new AOPProxy(new TestService());
+$logProxy = AOPProxy::create(new TestService());
 $logProxy->addAdvice(new LogAdvice());
 $logProxy->test('test');
 
@@ -78,3 +78,5 @@ test<br>
 end log
 
 前置增强需要实现BeforeAdvice、后置增强需要实现AfterAdvice
+
+支持创建单例,create($obj, $useSingleton),当第二个参数为true的时候创建的代理为单例(默认为true)

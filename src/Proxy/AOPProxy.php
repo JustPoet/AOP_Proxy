@@ -24,9 +24,16 @@ use Exception;
 class AOPProxy
 {
     /**
-     * @var object
+     * target
+     *
+     * @var
      */
-    private $instance;
+    private $targetObject;
+
+    /**
+     * @var AOPProxy
+     */
+    private static $instance;
 
     /**
      * @var array
@@ -36,11 +43,34 @@ class AOPProxy
     /**
      * ProxyClient constructor.
      *
-     * @param $instance
+     * @param $targetObject
      */
-    public function __construct($instance)
+    private function __construct($targetObject = null)
     {
-        $this->instance = $instance;
+        if ($targetObject) {
+            $this->targetObject = $targetObject;
+        }
+    }
+
+    /**
+     * 创建代理
+     *
+     * @param object $targetObject  目标对象
+     * @param bool   $singleton     是否单例
+     *
+     * @return AOPProxy|static
+     */
+    public static function create($targetObject = null, $singleton = true)
+    {
+        if ($singleton) {
+            if (null === static::$instance) {
+                static::$instance = new static($targetObject);
+            }
+
+            return static::$instance;
+        } else {
+            return new static($targetObject);
+        }
     }
 
     /**
@@ -51,7 +81,7 @@ class AOPProxy
      */
     public function __call($method, $parameters)
     {
-        $className = get_class($this->instance);
+        $className = get_class($this->targetObject);
         $result = [];
         $this->before($method, $parameters, $className);
 
@@ -115,8 +145,8 @@ class AOPProxy
     {
         $result = [];
 
-        if (method_exists($this->instance, $method)) {
-            $result = call_user_func_array([$this->instance, $method], $parameters);
+        if (method_exists($this->targetObject, $method)) {
+            $result = call_user_func_array([$this->targetObject, $method], $parameters);
         } else {
             throw new Exception('Method dose not exist');
         }
@@ -133,6 +163,23 @@ class AOPProxy
     public function addAdvice(Advice $advice)
     {
         $this->advices[] = $advice;
+
         return $this;
+    }
+
+    /**
+     * @param object $targetObject
+     */
+    public function setTargetObject(object $targetObject)
+    {
+        $this->targetObject = $targetObject;
+    }
+
+    private function __clone()
+    {
+    }
+
+    private function __wakeup()
+    {
     }
 }
