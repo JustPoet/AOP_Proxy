@@ -16,6 +16,7 @@
  *
  * @link      https://github.com/ZhengZean
  */
+
 namespace Zean\Proxy;
 
 
@@ -55,8 +56,8 @@ class AOPProxy
     /**
      * 创建代理
      *
-     * @param object $targetObject  目标对象
-     * @param bool   $singleton     是否单例
+     * @param object $targetObject 目标对象
+     * @param bool   $singleton    是否单例
      *
      * @return AOPProxy|static
      */
@@ -114,7 +115,8 @@ class AOPProxy
     {
         foreach ($this->advices as $advice) {
             if (method_exists($advice, 'exception')) {
-                $advice->exception($method, $parameters, $className, $exception);
+                $advice->exception($method, $parameters, $className,
+                    $exception);
             }
         }
     }
@@ -143,15 +145,12 @@ class AOPProxy
      */
     public function run($method, $parameters)
     {
-        $result = [];
-
         if (method_exists($this->targetObject, $method)) {
-            $result = call_user_func_array([$this->targetObject, $method], $parameters);
+            return call_user_func_array([$this->targetObject, $method],
+                $parameters);
         } else {
             throw new Exception('Method dose not exist');
         }
-
-        return $result;
     }
 
 
